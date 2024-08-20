@@ -5,7 +5,7 @@ from pinecone_text.sparse import BM25Encoder
 from langchain_huggingface import HuggingFaceEmbeddings
 
 # Pinecone API Key
-api_key = "39f61a31-5175-4eab-a795-6958263612f9"
+api_key = "your-pinecone-api-key"
 
 # Initialize Pinecone client
 pc = Pinecone(api_key=api_key)
@@ -26,12 +26,13 @@ index = pc.Index(index_name)
 # Initialize embeddings
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# Simple whitespace tokenizer function
-def simple_tokenizer(text):
+# Custom tokenizer to completely avoid NLTK
+def custom_tokenizer(text):
+    # Tokenize based on whitespace
     return text.split()
 
-# Initialize BM25Encoder without NLTK
-bm25_encoder = BM25Encoder().default()
+# Initialize BM25Encoder with custom tokenizer
+bm25_encoder = BM25Encoder(tokenizer=custom_tokenizer).default()
 
 # Create the retriever
 retriever = PineconeHybridSearchRetriever(embeddings=embeddings, sparse_encoder=bm25_encoder, index=index)
@@ -57,8 +58,8 @@ if st.button("Add Sample Texts"):
         "In 2021, I visited New Orleans",
     ]
     # Manually tokenize and add texts to the BM25 encoder
-    tokenized_texts = [simple_tokenizer(text) for text in texts]
-    bm25_encoder.fit(texts)
+    tokenized_texts = [custom_tokenizer(text) for text in texts]
+    bm25_encoder.fit(tokenized_texts)
     retriever.add_texts(texts)
     st.write("Sample texts added to the retriever.")
 
