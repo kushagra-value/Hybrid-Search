@@ -4,7 +4,7 @@ from pinecone import Pinecone, ServerlessSpec
 from pinecone_text.sparse import BM25Encoder
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# Pinecone API Key
+# Pinecone API Key (For demo purposes, it is hardcoded. Replace with a secure method in production)
 api_key = "39f61a31-5175-4eab-a795-6958263612f9"
 
 # Initialize Pinecone client
@@ -23,10 +23,8 @@ if index_name not in pc.list_indexes().names():
 # Load the index
 index = pc.Index(index_name)
 
-# Initialize embeddings
+# Initialize embeddings and BM25 encoder
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-
-# Initialize BM25Encoder
 bm25_encoder = BM25Encoder().default()
 
 # Create the retriever
@@ -52,10 +50,7 @@ if st.button("Add Sample Texts"):
         "In 2022, I visited New York",
         "In 2021, I visited New Orleans",
     ]
-    # Manually tokenize texts and add to BM25 encoder
-    tokenized_texts = [text.split() for text in texts]
-    bm25_encoder.fit(tokenized_texts)  # Pass tokenized texts to BM25 encoder
-    retriever.add_texts(texts)  # Optionally add the raw texts to retriever
+    retriever.add_texts(texts)
     st.write("Sample texts added to the retriever.")
 
 if __name__ == "__main__":
