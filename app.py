@@ -4,6 +4,9 @@ from pinecone import Pinecone, ServerlessSpec
 from pinecone_text.sparse import BM25Encoder
 from langchain_huggingface import HuggingFaceEmbeddings
 
+import nltk
+nltk.download('punkt')
+
 # Pinecone API Key (For demo purposes, it is hardcoded. Replace with a secure method in production)
 api_key = "39f61a31-5175-4eab-a795-6958263612f9"
 
