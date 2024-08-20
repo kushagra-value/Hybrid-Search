@@ -32,3 +32,4 @@ numexpr
 huggingface_hub
 streamlit
 pinecone
+pinecone_text
