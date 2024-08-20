@@ -26,13 +26,8 @@ index = pc.Index(index_name)
 # Initialize embeddings
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# Custom tokenizer to completely avoid NLTK
-def custom_tokenizer(text):
-    # Tokenize based on whitespace
-    return text.split()
-
-# Initialize BM25Encoder with custom tokenizer
-bm25_encoder = BM25Encoder(tokenizer=custom_tokenizer).default()
+# Initialize BM25Encoder
+bm25_encoder = BM25Encoder().default()
 
 # Create the retriever
 retriever = PineconeHybridSearchRetriever(embeddings=embeddings, sparse_encoder=bm25_encoder, index=index)
@@ -57,10 +52,10 @@ if st.button("Add Sample Texts"):
         "In 2022, I visited New York",
         "In 2021, I visited New Orleans",
     ]
-    # Manually tokenize and add texts to the BM25 encoder
-    tokenized_texts = [custom_tokenizer(text) for text in texts]
-    bm25_encoder.fit(tokenized_texts)
-    retriever.add_texts(texts)
+    # Manually tokenize texts and add to BM25 encoder
+    tokenized_texts = [text.split() for text in texts]
+    bm25_encoder.fit(tokenized_texts)  # Pass tokenized texts to BM25 encoder
+    retriever.add_texts(texts)  # Optionally add the raw texts to retriever
     st.write("Sample texts added to the retriever.")
 
 if __name__ == "__main__":
