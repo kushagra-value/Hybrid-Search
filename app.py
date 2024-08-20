@@ -4,7 +4,7 @@ from pinecone import Pinecone, ServerlessSpec
 from pinecone_text.sparse import BM25Encoder
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# Pinecone API Key (For demo purposes, it is hardcoded. Replace with a secure method in production)
+# Pinecone API Key
 api_key = "39f61a31-5175-4eab-a795-6958263612f9"
 
 # Initialize Pinecone client
@@ -59,3 +59,7 @@ if st.button("Add Sample Texts"):
 
 if __name__ == "__main__":
     st.write("Streamlit app is running...")
+
+# Ensure nltk is downloading the punkt resource
+import nltk
+nltk.download('punkt')
