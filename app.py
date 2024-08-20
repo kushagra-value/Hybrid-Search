@@ -4,6 +4,10 @@ from pinecone import Pinecone, ServerlessSpec
 from pinecone_text.sparse import BM25Encoder
 from langchain_huggingface import HuggingFaceEmbeddings
 
+# Simple tokenizer function to replace NLTK
+def simple_tokenizer(text):
+    return text.lower().split()
+
 # Pinecone API Key (For demo purposes, it is hardcoded. Replace with a secure method in production)
 api_key = "39f61a31-5175-4eab-a795-6958263612f9"
 
@@ -25,7 +29,9 @@ index = pc.Index(index_name)
 
 # Initialize embeddings and BM25 encoder
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-bm25_encoder = BM25Encoder().default()
+
+# Initialize BM25Encoder with the simple tokenizer
+bm25_encoder = BM25Encoder(tokenizer=simple_tokenizer).default()
 
 # Create the retriever
 retriever = PineconeHybridSearchRetriever(embeddings=embeddings, sparse_encoder=bm25_encoder, index=index)
