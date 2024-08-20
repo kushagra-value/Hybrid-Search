@@ -26,7 +26,11 @@ index = pc.Index(index_name)
 # Initialize embeddings
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# Initialize BM25Encoder without any custom tokenizer
+# Simple whitespace tokenizer function
+def simple_tokenizer(text):
+    return text.split()
+
+# Initialize BM25Encoder without NLTK
 bm25_encoder = BM25Encoder().default()
 
 # Create the retriever
@@ -52,14 +56,11 @@ if st.button("Add Sample Texts"):
         "In 2022, I visited New York",
         "In 2021, I visited New Orleans",
     ]
-    # Fit the BM25 encoder with the list of strings
+    # Manually tokenize and add texts to the BM25 encoder
+    tokenized_texts = [simple_tokenizer(text) for text in texts]
     bm25_encoder.fit(texts)
     retriever.add_texts(texts)
     st.write("Sample texts added to the retriever.")
 
 if __name__ == "__main__":
     st.write("Streamlit app is running...")
-
-# Ensure nltk is downloading the punkt resource
-import nltk
-nltk.download('punkt')
