@@ -6,7 +6,6 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 import nltk
 nltk.download('punkt')
-nltk.download('punkt_tab')
 
 # Pinecone API Key (For demo purposes, it is hardcoded. Replace with a secure method in production)
 api_key = "39f61a31-5175-4eab-a795-6958263612f9"
@@ -48,14 +47,18 @@ if st.button("Search"):
         st.write("Please enter a query to search.")
 
 # Optionally, add texts to the retriever
-if st.button("Add Sample Texts"):
-    texts = [
-        "In 2023, I visited Paris",
-        "In 2022, I visited New York",
-        "In 2021, I visited New Orleans",
-    ]
-    retriever.add_texts(texts)
-    st.write("Sample texts added to the retriever.")
+st.subheader("Add Sample Texts")
+
+# Text input for adding new texts
+sample_texts_input = st.text_area("Enter your sample texts, one per line:")
+
+if st.button("Add Texts"):
+    if sample_texts_input:
+        texts = [line.strip() for line in sample_texts_input.split('\n') if line.strip()]
+        retriever.add_texts(texts)
+        st.write(f"{len(texts)} sample texts added to the retriever.")
+    else:
+        st.write("Please enter some texts to add.")
 
 if __name__ == "__main__":
     st.write("Streamlit app is running...")
