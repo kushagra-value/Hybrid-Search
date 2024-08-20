@@ -5,7 +5,7 @@ from pinecone_text.sparse import BM25Encoder
 from langchain_huggingface import HuggingFaceEmbeddings
 
 # Pinecone API Key
-api_key = "your-pinecone-api-key"
+api_key = "39f61a31-5175-4eab-a795-6958263612f9"
 
 # Initialize Pinecone client
 pc = Pinecone(api_key=api_key)
