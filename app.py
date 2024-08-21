@@ -10,6 +10,9 @@ import nltk
 nltk.download('punkt')
 nltk.download('punkt_tab')
 
+# Load environment variables
+load_dotenv()
+
 # Pinecone API Key (For demo purposes, it is hardcoded. Replace with a secure method in production)
 api_key = os.getenv("API_KEY")
 
@@ -45,7 +48,11 @@ query = st.text_input("Enter your search query:")
 if st.button("Search"):
     if query:
         result = retriever.invoke(query)
-        st.write("**Search Result:**", result)
+        if result:  # Check if the result is not empty
+            first_result = result[0]  # Get the first result from the list
+            st.write("**Search Result:**", first_result)
+        else:
+            st.write("No results found.")
     else:
         st.write("Please enter a query to search.")
 
